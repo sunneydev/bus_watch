@@ -1,0 +1,33 @@
+name: bus_watch
+description: A new Flutter project.
+
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  google_maps_flutter: ^2.0.3
+  google_maps_cluster_manager: ^1.0.0
+  http: ^0.13.1
+  hive: ^2.0.2
+  hive_flutter: ^1.0.0
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  hive_generator: ^1.0.1
+  build_runner: ^1.12.2
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/bus-stop-pointer.png
+    - assets/bus.png
+    - assets/bus-stop-icon.png
