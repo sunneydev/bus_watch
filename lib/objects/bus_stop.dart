@@ -10,12 +10,15 @@ class BusStop extends HiveObject {
   double latitude;
   @HiveField(3)
   double longitude;
+  @HiveField(4)
+  String nickname;
 
   BusStop({
-    this.code,
-    this.name,
+    this.code = "",
+    this.name = "",
     this.latitude,
     this.longitude,
+    this.nickname = "",
   });
 
   factory BusStop.fromJson(json) {
@@ -37,7 +40,8 @@ class BusStopAdapter extends TypeAdapter<BusStop> {
       ..code = reader.read()
       ..name = reader.read()
       ..latitude = reader.read()
-      ..longitude = reader.read();
+      ..longitude = reader.read()
+      ..nickname = reader.read();
   }
 
   @override
@@ -46,6 +50,7 @@ class BusStopAdapter extends TypeAdapter<BusStop> {
       ..write(obj.code)
       ..write(obj.name)
       ..write(obj.latitude)
-      ..write(obj.longitude);
+      ..write(obj.longitude)
+      ..write(obj.nickname);
   }
 }

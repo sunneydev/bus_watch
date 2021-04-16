@@ -1,4 +1,4 @@
-import 'package:bus_watch/maps.dart';
+import 'package:bus_watch/widgets/maps.dart';
 import 'package:bus_watch/widgets/bus_stops.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +23,8 @@ class BusWatchState extends State<BusWatch> {
       ),
       body: _widgets[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.white,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.map_rounded), label: "Map")
@@ -32,8 +34,6 @@ class BusWatchState extends State<BusWatch> {
             _selectedIndex = value;
           });
         },
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.white,
       ),
     );
   }

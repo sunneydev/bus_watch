@@ -31,7 +31,9 @@ class _BusTimeTableState extends State<BusTimeTable> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${this.stop.name} — #${this.stop.code}'),
+        title: this.stop.nickname != ""
+            ? Text('${this.stop.nickname} — #${this.stop.code}')
+            : Text('${this.stop.name} — #${this.stop.code}'),
       ),
       body: new FutureBuilder<List<BusInfo>>(
         future: fetchTimeTable(this.stop.code),
