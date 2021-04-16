@@ -2,7 +2,7 @@ name: bus_watch
 description: App to view bus timetables info around Tbilisi
 
 publish_to: 'none'
-version: 1.0.0+1
+version: 0.1.0+1
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -29,5 +29,4 @@ flutter:
 
   assets:
     - assets/bus-stop-pointer.png
-    - assets/bus.png
     - assets/bus-stop-icon.png

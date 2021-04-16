@@ -1,12 +1,15 @@
 import 'dart:ui';
 import 'dart:async';
-import 'utils.dart';
-import 'bus_stop.dart';
+import 'package:bus_watch/utils/hive.dart';
+import 'package:bus_watch/utils/utils.dart';
+
 import 'dart:typed_data';
 import 'package:hive/hive.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
+
+import 'objects/bus_stop.dart';
 
 const LIGHT_BLUE_COLOR = Color.fromRGBO(33, 150, 243, 50);
 const TBILISI_POSITION = LatLng(41.72708908914995, 44.778447529129004);
@@ -38,7 +41,7 @@ class BusMapState extends State<BusMap> {
 
   @override
   void initState() {
-    Hive.openBox('main').then((box) => {
+    Hive.openBox<BusStop>('main').then((box) => {
           if (box.isNotEmpty)
             {
               box.toMap().forEach((_, stop) {
@@ -80,89 +83,87 @@ class BusMapState extends State<BusMap> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(backgroundColor: LIGHT_BLUE_COLOR),
         body: Stack(
-          children: [
-            Positioned.fill(
-                child: GoogleMap(
-                    zoomControlsEnabled: false,
-                    mapType: MapType.normal,
-                    initialCameraPosition: _tbilisiCameraPosition,
-                    markers: _markers,
-                    cameraTargetBounds: CameraTargetBounds(LatLngBounds(
-                        northeast: NORTH_EAST_POSITION,
-                        southwest: SOUTH_WEST_POSITION)),
-                    myLocationButtonEnabled: true,
-                    onMapCreated: (GoogleMapController controller) {
-                      _controller.complete(controller);
-                      _manager.setMapController(controller);
-                    },
-                    onTap: (LatLng loc) {
-                      setState(() {
-                        this.pinPillPosition = INVISIBLE_PIN_POSITION;
-                      });
-                    },
-                    onCameraMove: _manager.onCameraMove,
-                    onCameraIdle: _manager.updateMap)),
-            AnimatedPositioned(
-                curve: Curves.easeInOut,
-                top: this.pinPillPosition,
-                left: 0,
-                right: 0,
-                duration: const Duration(milliseconds: 500),
-                child: Container(
-                  padding:
-                      EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 15),
-                  margin:
-                      EdgeInsets.only(top: 10, bottom: 10, left: 30, right: 20),
-                  decoration: BoxDecoration(
-                      color: LIGHT_BLUE_COLOR,
-                      borderRadius: BorderRadius.circular(100),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            blurRadius: 10,
-                            offset: Offset.zero)
-                      ]),
-                  child: Row(
-                    children: [
-                      Container(
-                          width: 40,
-                          height: 40,
-                          child: Icon(
-                            Icons.directions_bus_sharp,
-                            size: 40,
-                          )),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(this.selectedBusStop.name,
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                            Text('#${this.selectedBusStop.code}')
-                          ],
-                        ),
-                      ),
-                      IconButton(
-                          hoverColor: Colors.red,
-                          highlightColor: Colors.red,
-                          splashColor: Colors.white,
-                          onPressed: () {
-                            addBusStop(this.selectedBusStop);
-                          },
-                          icon: Icon(
-                            Icons.add,
-                            size: 35,
-                            color: Colors.white,
-                          )),
-                    ],
+      children: [
+        Positioned.fill(
+            child: GoogleMap(
+                zoomControlsEnabled: false,
+                mapType: MapType.normal,
+                initialCameraPosition: _tbilisiCameraPosition,
+                markers: _markers,
+                cameraTargetBounds: CameraTargetBounds(LatLngBounds(
+                    northeast: NORTH_EAST_POSITION,
+                    southwest: SOUTH_WEST_POSITION)),
+                myLocationButtonEnabled: true,
+                onMapCreated: (GoogleMapController controller) {
+                  _controller.complete(controller);
+                  _manager.setMapController(controller);
+                },
+                onTap: (LatLng loc) {
+                  setState(() {
+                    this.pinPillPosition = INVISIBLE_PIN_POSITION;
+                  });
+                },
+                onCameraMove: _manager.onCameraMove,
+                onCameraIdle: _manager.updateMap)),
+        AnimatedPositioned(
+            curve: Curves.easeInOut,
+            top: this.pinPillPosition,
+            left: 0,
+            right: 0,
+            duration: const Duration(milliseconds: 500),
+            child: Container(
+              padding:
+                  EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 15),
+              margin: EdgeInsets.only(top: 10, bottom: 10, left: 30, right: 20),
+              decoration: BoxDecoration(
+                  color: LIGHT_BLUE_COLOR,
+                  borderRadius: BorderRadius.circular(100),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 10,
+                        offset: Offset.zero)
+                  ]),
+              child: Row(
+                children: [
+                  Container(
+                      width: 40,
+                      height: 40,
+                      child: Icon(
+                        Icons.directions_bus_sharp,
+                        size: 40,
+                      )),
+                  SizedBox(
+                    width: 10,
                   ),
-                ))
-          ],
-        ));
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(this.selectedBusStop.name,
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        Text('#${this.selectedBusStop.code}')
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                      hoverColor: Colors.red,
+                      highlightColor: Colors.red,
+                      splashColor: Colors.white,
+                      onPressed: () {
+                        addBusStop(this.selectedBusStop);
+                      },
+                      icon: Icon(
+                        Icons.add,
+                        size: 35,
+                        color: Colors.white,
+                      )),
+                ],
+              ),
+            ))
+      ],
+    ));
   }
 
   Future<Marker> Function(Cluster<BusStop>) get _markerBuilder =>
